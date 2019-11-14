@@ -1,5 +1,6 @@
 const express = require('express'); 
 const router = express.Router(); 
+const Post = require('../models/Post'); 
 
 //Middlewares! 
 
@@ -10,10 +11,11 @@ router.get('/', (req, res) => {
     res.send('We are on posts');
 });
 
-router.get('/specific', (req, res) => {
-    res.send('Specific post');
-});
-
+router.post('/', (req, res) => {
+    //The way we create a new post..
+    //We are going to have to access the information (the thing we are posting to the API from the body)
+    console.log(req.body); 
+})
 
 
 module.exports = router; 
