@@ -1,8 +1,12 @@
 const express = require('express'); 
 const app = express(); 
 const mongoose = require('mongoose');
+const bodyParser = require('body-parser'); 
 require('dotenv/config');
 
+//middleware
+app.use(bodyParser.json());
+//bodyParser processes the request we made thru Postman and parses it so it displays in the terminal 
 
 //import routes
 const postsRoute = require('./routes/posts'); 
