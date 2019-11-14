@@ -1,5 +1,7 @@
 const express = require('express'); 
 const router = express.Router(); 
+
+//import model we want to post to 
 const Post = require('../models/Post'); 
 
 //Middlewares! 
@@ -12,7 +14,7 @@ router.get('/', (req, res) => {
 });
 
 router.post('/', (req, res) => {
-    const post = new Post({ //this is coming from line 3 
+    const post = new Post({
         title: req.body.title, 
         description: req.body.description
     });
@@ -23,7 +25,7 @@ router.post('/', (req, res) => {
         res.json(data); //how we can see it on the screen
     })
     .catch(err => {
-        res.json({message: err});  
+        res.json( {message: err} );  
     });
 
     //The way we create a new post..

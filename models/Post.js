@@ -1,11 +1,12 @@
-const mongoose = require('mongoose');
+ const mongoose = require('mongoose');
 
 //Now we are going to create a Schema
-//What a schema means is how that Post looks
+
+//What a schema means is how that post looks
 //Title, string, description... how your data looks
 
 const PostSchema = mongoose.Schema({ 
-    //this is where we describe the properties 
+    //this is where we describe the properties (in an object)
     title: {
         type: String, 
         required: true
@@ -17,7 +18,7 @@ const PostSchema = mongoose.Schema({
     date: {
         type: Date, 
         default: Date.now
-    }, 
+    } 
 });
 
 //we create the model (.model) give a name 'Posts' and the Schema it uses (PostSchema)
