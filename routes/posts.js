@@ -1,42 +1,68 @@
-const express = require('express'); 
-const router = express.Router(); 
-
-//import model we want to post to 
-const Post = require('../models/Post'); 
+const express = require('express');
+const router = express.Router();
+const Post = require('../models/Post');
 
 //Middlewares! 
 
-//You don't have to do .get('/posts') because you're in the posts route. (Whatever you have in that app.use('/'))
-//You must create that route, export the route (line 19) and bring it into the app.js and use it as a middleware
-
-router.get('/', (req, res) => { 
-    res.send('We are on posts');
+//this makes it so ALL OF OUR POSTS display under get (postman)
+router.get('/', async (req, res) => {
+    try {
+        const posts = await Post.find();
+        res.json(posts);
+    } catch (err) {
+        res.json({ message: err });
+    }
 });
 
-router.post('/', (req, res) => {
+
+//SUBMITS A POST
+router.post('/', async (req, res) => {
     const post = new Post({
-        title: req.body.title, 
+        title: req.body.title,
         description: req.body.description
     });
 
-    //we can save the information on lines 14-18 by using post.save() below
-    post.save() //returns a promise
-    .then(data => { //retrieve data
-        res.json(data); //how we can see it on the screen
-    })
-    .catch(err => {
-        res.json( {message: err} );  
-    });
-
-    //The way we create a new post..
-    //We are going to have to access the information (the thing we are posting to the API from the body)
-
-     
-    //when we use postman, console.log(req.body); isn't going to work because we need it to be converted to JSON 
-    //the way we can do that is through bodyparser 
-    //it will parse our request from Postman, and give back correct data
-
+    try {
+        //we can save the information on lines 14-18 by using post.save() below
+        const savedPost = await post.save() //returns a promise
+        res.json(savedPost);
+    } catch (err) {
+        res.json({ message: err });
+    };
 });
 
+//SPECIFIC DATA
+router.get('/:postId', async (req, res) => {
+    try {
+        const post = await Post.findById(req.params.postId);
+        res.json(post); //this sends post
+    } catch (err) {
+        res.json({ message: err });
+    }
+});
+
+
+//DELETE A POST
+router.delete('/:postId', async (req, res) => {
+    try {
+        const removedPost = await Post.remove({ _id: req.params.postId })
+        res.json(removedPost);
+    } catch (err) {
+        res.json({ message: err });
+    }
+});
+
+//UPDATE A POST
+router.patch('/:postId', async (req, res) => {
+    try{
+    const updatedPost = await Post.updateOne(
+        { _id: req.params.postId }, 
+        { $set: {title: req.body.title} } //set new value here
+    ); 
+    res.json(updatedPost); //output the updatedpost
+    }catch (err) {
+        res.json({ message: err });
+    }
+}); 
 
 module.exports = router; 
